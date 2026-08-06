@@ -1,5 +1,6 @@
 package com.example.SpringBootLearning.controller;
 
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,22 +17,8 @@ public class HomeController {
 	}
 	
 	@GetMapping("/")
-	public String home() {
-		return homeService.getHomeMessage();
-	}
-	
-	@GetMapping("/about")
-	public String about() {
-		return homeService.getAboutMessage();
-	}
-	
-	@GetMapping("/name")
-	public String name() {
-		return homeService.getNameMessage();
-	}
-	
-	@GetMapping("/hello-user/{name}")
-	public String hello(@PathVariable String name) {
-		return homeService.getHelloMessage(name);
+	public String home(Model model) {
+		model.addAttribute("students", homeService.students);
+		return "home";
 	}
 }
