@@ -29,4 +29,9 @@ public class StudentController {
 	public List<Student> getStudentsByCity(@PathVariable String city) {
 		return homeService.getStudentsByCity(city);
 	}
+	
+	@GetMapping("/test-student")
+	public String testStudent() {
+		return homeService.createTestStudent();
+	}
 }
