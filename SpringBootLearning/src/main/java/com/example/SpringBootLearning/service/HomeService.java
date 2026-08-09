@@ -7,25 +7,34 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.example.SpringBootLearning.model.Student;
+import com.example.SpringBootLearning.repository.StudentRepository;
 
 @Service
 public class HomeService {
 	
-	public final List<Student> students = Arrays.asList(
-				new Student(1, "Alice", "Ahmedabad"),
-				new Student(2, "Bob", "Baroda"),
-				new Student(3, "Charlie", "Chennai")
-		);
+	private final StudentRepository studentRepository;
+	
+	public HomeService(StudentRepository studentRepository) {
+		this.studentRepository = studentRepository;
+	}
+	
+	public String createTestStudent() {
+		Student student = new Student();
+		student.setName("Test Student");
+		student.setCity("Delhi");
 		
+		Student savedStudent = studentRepository.save(student);
+		
+		return "Student saved successfully with ID: " + savedStudent.getId();
+	}
+	
 	public Student getStudentById(int id) {
-		return students.stream()
-				.filter(s -> s.getId() ==id)
-				.findFirst()
-				.orElse(null);
+		return studentRepository.findById(id).orElse(null);
 	}
 	
 	public List<Student> getStudentsByCity(String city) {
-		return students.stream()
+		return studentRepository.findAll()
+				.stream()
 				.filter(s -> s.getCity().equalsIgnoreCase(city))
 				.collect(Collectors.toList());
 	}
