@@ -38,4 +38,8 @@ public class HomeService {
 				.filter(s -> s.getCity().equalsIgnoreCase(city))
 				.collect(Collectors.toList());
 	}
+	
+	public List<Student> getAllStudents() {
+		return studentRepository.findAll();
+	}
 }
