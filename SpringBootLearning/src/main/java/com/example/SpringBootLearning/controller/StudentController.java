@@ -3,6 +3,9 @@ package com.example.SpringBootLearning.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +35,7 @@ public class StudentController {
 		return homeService.getStudentById(id);
 	}
 	
-	@GetMapping("/students/city/{city}")
+	@GetMapping("/city/{city}")
 	public List<Student> getStudentsByCity(@PathVariable String city) {
 		return homeService.getStudentsByCity(city);
 	}
@@ -40,5 +43,11 @@ public class StudentController {
 	@GetMapping("/test-student")
 	public String testStudent() {
 		return homeService.createTestStudent();
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<String> deleteStudent(@PathVariable int id) {
+		homeService.deleteStudent(id);
+		return ResponseEntity.ok("Student with ID " + id + " deleted successfully");
 	}
 }
