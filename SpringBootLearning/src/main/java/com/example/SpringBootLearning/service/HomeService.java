@@ -42,4 +42,17 @@ public class HomeService {
 	public List<Student> getAllStudents() {
 		return studentRepository.findAll();
 	}
+	
+	public String deleteStudentById(int id) {
+		if (!studentRepository.existsById(id)) {
+			return "Student with ID " + id + " not found";
+		}
+		
+		studentRepository.deleteById(id);
+		return "Student with ID " + id + " deleted successfully";
+	}
+	
+	public void deleteStudent(int id) {
+		studentRepository.deleteById(id);
+	}
 }
