@@ -10,24 +10,24 @@ public class Student {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 	private String name;
 	private String city;
 	
 	public Student() {
 	}
 
-	public Student(int id, String name, String city) {
+	public Student(Integer id, String name, String city) {
 		this.id = id;
 		this.name = name;
 		this.city = city;
 	}
 	
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
