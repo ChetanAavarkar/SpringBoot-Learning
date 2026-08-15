@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.SpringBootLearning.dto.StudentDTO;
 import com.example.SpringBootLearning.model.Student;
 import com.example.SpringBootLearning.service.HomeService;
 
@@ -28,7 +29,7 @@ public class StudentController {
 	}
 	
 	@GetMapping
-	public List<Student> getAllStudents() {
+	public List<StudentDTO> getAllStudents() {
 		return homeService.getAllStudents();
 	}
 	
