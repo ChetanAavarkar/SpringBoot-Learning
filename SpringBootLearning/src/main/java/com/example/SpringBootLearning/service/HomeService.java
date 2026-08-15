@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.example.SpringBootLearning.dto.StudentDTO;
 import com.example.SpringBootLearning.model.Student;
 import com.example.SpringBootLearning.repository.StudentRepository;
 
@@ -40,7 +41,10 @@ public class HomeService {
 	}
 	
 	public List<Student> getAllStudents() {
-		return studentRepository.findAll();
+		return studentRepository.findAll()
+				.stream()
+				.map(student -> new StudentDTO(student.getName(), student.getCity()))
+				.toList();
 	}
 	
 	public String deleteStudentById(int id) {
