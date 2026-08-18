@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.example.SpringBootLearning.dto.StudentDTO;
 import com.example.SpringBootLearning.dto.StudentRequestDTO;
 import com.example.SpringBootLearning.dto.StudentResponseDTO;
+import com.example.SpringBootLearning.exception.StudentNotFoundException;
 import com.example.SpringBootLearning.model.Student;
 import com.example.SpringBootLearning.repository.StudentRepository;
 
@@ -45,7 +46,8 @@ public class HomeService {
     }
 	
 	public Student getStudentById(int id) {
-		return studentRepository.findById(id).orElse(null);
+		return studentRepository.findById(id)
+				.orElseThrow(() -> new StudentNotFoundException("Student not found with id: " + id));
 	}
 	
 	public List<Student> getStudentsByCity(String city) {
