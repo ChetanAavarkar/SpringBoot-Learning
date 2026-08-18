@@ -1,5 +1,6 @@
 package com.example.SpringBootLearning.service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -7,6 +8,8 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.example.SpringBootLearning.dto.StudentDTO;
+import com.example.SpringBootLearning.dto.StudentRequestDTO;
+import com.example.SpringBootLearning.dto.StudentResponseDTO;
 import com.example.SpringBootLearning.model.Student;
 import com.example.SpringBootLearning.repository.StudentRepository;
 
@@ -19,15 +22,27 @@ public class HomeService {
 		this.studentRepository = studentRepository;
 	}
 	
-	public String createTestStudent() {
+	public StudentResponseDTO createStudent(StudentRequestDTO requestDTO) {
 		Student student = new Student();
-		student.setName("Test Student");
-		student.setCity("Delhi");
+		student.setName(requestDTO.getName());
+		student.setCity(requestDTO.getCity());
 		
 		Student savedStudent = studentRepository.save(student);
 		
-		return "Student saved successfully with ID: " + savedStudent.getId();
+		return new StudentResponseDTO(
+				savedStudent.getId(),
+				savedStudent.getName(),
+				savedStudent.getCity()
+		);
 	}
+	
+	public String createTestStudent() {
+        Student student = new Student();
+        student.setName("Test Student");
+        student.setCity("Delhi");
+        Student savedStudent = studentRepository.save(student);
+        return "Student saved successfully with ID: " + savedStudent.getId();
+    }
 	
 	public Student getStudentById(int id) {
 		return studentRepository.findById(id).orElse(null);
@@ -40,7 +55,7 @@ public class HomeService {
 				.collect(Collectors.toList());
 	}
 	
-	public List<Student> getAllStudents() {
+	public List<StudentDTO> getAllStudents() {
 		return studentRepository.findAll()
 				.stream()
 				.map(student -> new StudentDTO(student.getName(), student.getCity()))
@@ -58,5 +73,19 @@ public class HomeService {
 	
 	public void deleteStudent(int id) {
 		studentRepository.deleteById(id);
+	}
+	
+	public Student updateStudent(int id, String name, String city) {
+		Student student = studentRepository.findById(id)
+				.orElse(null);
+		
+		if (student == null) {
+			return null;
+		}
+		
+		student.setName(name);
+		student.setCity(city);
+		
+		return studentRepository.save(student);
 	}
 }
