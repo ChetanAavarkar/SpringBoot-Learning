@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,8 +16,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.SpringBootLearning.dto.StudentDTO;
+import com.example.SpringBootLearning.dto.StudentRequestDTO;
+import com.example.SpringBootLearning.dto.StudentResponseDTO;
 import com.example.SpringBootLearning.model.Student;
 import com.example.SpringBootLearning.service.HomeService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/students")
@@ -57,5 +62,12 @@ public class StudentController {
 	@PutMapping("/{id}")
 	public Student updateStudent(@PathVariable int id, @RequestBody Student updatedStudent) {
 	    return homeService.updateStudent(id, updatedStudent.getName(), updatedStudent.getCity());
+	}
+	
+	@PostMapping("/students")
+	public ResponseEntity<StudentResponseDTO> createStudent(@Valid @RequestBody StudentRequestDTO requestDTO) {
+		
+		StudentResponseDTO response = homeService.createStudent(requestDTO);
+		return ResponseEntity.ok(response);
 	}
 }
