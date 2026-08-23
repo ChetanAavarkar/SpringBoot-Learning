@@ -3,6 +3,8 @@ package com.example.SpringBootLearning.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,12 +23,14 @@ import com.example.SpringBootLearning.dto.StudentResponseDTO;
 import com.example.SpringBootLearning.model.Student;
 import com.example.SpringBootLearning.service.HomeService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/students")
 public class StudentController {
 	
+	private static final org.slf4j.Logger log = LoggerFactory.getLogger(StudentController.class);
 	private final HomeService homeService;
 	
 	public StudentController(HomeService homeService) {
@@ -35,16 +39,34 @@ public class StudentController {
 	
 	@GetMapping
 	public List<StudentDTO> getAllStudents() {
+		log.info("Fetching all students");
 		return homeService.getAllStudents();
 	}
 	
+	@Operation(summary = "Get student by ID", description = "Retrieves a student using their ID")
 	@GetMapping("/{id}")
 	public Student getStudentById(@PathVariable int id) {
-		return homeService.getStudentById(id);
+		log.info("Student request received for ID: {}", id);
+		
+		log.debug("Searching student with id={}", id);
+		
+		try {
+			Student student = homeService.getStudentById(id);
+			
+			log.info("Student found successfully: {}", student.getName());
+			return student;
+		} catch (Exception e) {
+			log.warn("Request student ID may not exist: {}", id);
+			
+			log.error("Database operation failed while fetching studnet with ID: {}", id, e);
+			
+			throw e;
+		}
 	}
 	
 	@GetMapping("/city/{city}")
 	public List<Student> getStudentsByCity(@PathVariable String city) {
+		log.info("Fetching students from city: {}", city);
 		return homeService.getStudentsByCity(city);
 	}
 	
@@ -55,18 +77,20 @@ public class StudentController {
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteStudent(@PathVariable int id) {
+		log.info("Deleting student with ID: {}", id);
 		homeService.deleteStudent(id);
 		return ResponseEntity.ok("Student with ID " + id + " deleted successfully");
 	}
 	
 	@PutMapping("/{id}")
 	public Student updateStudent(@PathVariable int id, @RequestBody Student updatedStudent) {
+		log.info("Updating student with ID: {}", id);
 	    return homeService.updateStudent(id, updatedStudent.getName(), updatedStudent.getCity());
 	}
 	
 	@PostMapping("/students")
 	public ResponseEntity<StudentResponseDTO> createStudent(@Valid @RequestBody StudentRequestDTO requestDTO) {
-		
+		log.info("Creating new student: {}", requestDTO.getName());
 		StudentResponseDTO response = homeService.createStudent(requestDTO);
 		return ResponseEntity.ok(response);
 	}
