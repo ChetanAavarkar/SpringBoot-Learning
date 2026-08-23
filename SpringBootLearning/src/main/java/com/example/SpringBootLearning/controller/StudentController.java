@@ -82,6 +82,16 @@ public class StudentController {
 		return ResponseEntity.ok("Student with ID " + id + " deleted successfully");
 	}
 	
+	@GetMapping("/name/{name}")
+	public List<Student> getStudentsByName(@PathVariable String name) {
+		return homeService.getStudentsByName(name);
+	}
+	
+	@GetMapping("/search/{keyword}")
+	public List<Student> searchStudents(@PathVariable String keyword) {
+		return homeService.searchStudentsByName(keyword);
+	}
+	
 	@PutMapping("/{id}")
 	public Student updateStudent(@PathVariable int id, @RequestBody Student updatedStudent) {
 		log.info("Updating student with ID: {}", id);
