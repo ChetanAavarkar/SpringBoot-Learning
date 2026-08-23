@@ -51,10 +51,15 @@ public class HomeService {
 	}
 	
 	public List<Student> getStudentsByCity(String city) {
-		return studentRepository.findAll()
-				.stream()
-				.filter(s -> s.getCity().equalsIgnoreCase(city))
-				.collect(Collectors.toList());
+		return studentRepository.findByCityIgnoreCase(city);
+	}
+	
+	public List<Student> getStudentsByName(String name) {
+		return studentRepository.findByName(name);
+	}
+	
+	public List<Student> searchStudentsByName(String keyword) {
+		return studentRepository.findByNameContaining(keyword);
 	}
 	
 	public List<StudentDTO> getAllStudents() {
