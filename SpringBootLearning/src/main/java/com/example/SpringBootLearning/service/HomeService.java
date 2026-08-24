@@ -51,7 +51,7 @@ public class HomeService {
 	}
 	
 	public List<Student> getStudentsByCity(String city) {
-		return studentRepository.findByCityIgnoreCase(city);
+		return studentRepository.findByCity(city);
 	}
 	
 	public List<Student> getStudentsByName(String name) {
