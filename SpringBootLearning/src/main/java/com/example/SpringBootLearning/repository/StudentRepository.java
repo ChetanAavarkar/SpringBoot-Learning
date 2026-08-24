@@ -6,7 +6,8 @@ import com.example.SpringBootLearning.model.Student;
 
 public interface StudentRepository extends JpaRepository<Student, Integer> {
 
-	List<Student> findByCity(String city);
+	@Query("Select s from Student s where s.city = :city")
+	List<Student> findByCity(@Param("city") String city);
 	List<Student> findByName(String name);
 	List<Student> findByNameContaining(String name);
 	List<Student> findByCityIgnoreCase(String city);
