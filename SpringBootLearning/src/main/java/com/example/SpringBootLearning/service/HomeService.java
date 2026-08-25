@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.SpringBootLearning.dto.StudentDTO;
@@ -67,6 +69,10 @@ public class HomeService {
 				.stream()
 				.map(student -> new StudentDTO(student.getName(), student.getCity()))
 				.toList();
+	}
+	
+	public Page<Student> getStudents(Pageable pageable) {
+		return studentRepository.findAll(pageable);
 	}
 	
 	public String deleteStudentById(int id) {
