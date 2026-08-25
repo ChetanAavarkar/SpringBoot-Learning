@@ -4,7 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.Logger;
+import org.hibernate.query.SortDirection;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,6 +43,13 @@ public class StudentController {
 	}
 	
 	@GetMapping
+	public Page<Student> getStudents(
+			@PageableDefault(size = 5, sort = "name", direction = Sort.Direction.ASC) Pageable pageable) {
+		return homeService.getStudents(pageable);
+	}
+
+	//use it to get all data at once
+	@GetMapping
 	public List<StudentDTO> getAllStudents() {
 		log.info("Fetching all students");
 		return homeService.getAllStudents();
@@ -65,7 +77,7 @@ public class StudentController {
 	}
 	
 	@GetMapping("/city/{city}")
-	public List<Student> getStudentsByCity(@PathVariable String city) {
+	public List<Student> getSByCity(@PathVariable String city) {
 		log.info("Fetching students from city: {}", city);
 		return homeService.getStudentsByCity(city);
 	}
