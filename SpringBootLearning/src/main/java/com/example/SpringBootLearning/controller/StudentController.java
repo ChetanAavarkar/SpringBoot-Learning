@@ -44,7 +44,7 @@ public class StudentController {
 	
 	@GetMapping
 	public Page<Student> getStudents(
-			@PageableDefault(size = 5, sort = "name", direction = Sort.Direction.ASC) Pageable pageable) {
+			@PageableDefault(size = 10, sort = "name", direction = Sort.Direction.ASC) Pageable pageable) {
 		return homeService.getStudents(pageable);
 	}
 
