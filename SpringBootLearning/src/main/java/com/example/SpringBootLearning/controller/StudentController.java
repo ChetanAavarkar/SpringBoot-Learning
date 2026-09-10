@@ -42,13 +42,12 @@ public class StudentController {
 		this.homeService = homeService;
 	}
 	
-	@GetMapping
+	@GetMapping("/page")
 	public Page<Student> getStudents(
 			@PageableDefault(size = 10, sort = "name", direction = Sort.Direction.ASC) Pageable pageable) {
 		return homeService.getStudents(pageable);
 	}
-
-	//use it to get all data at once
+	
 	@GetMapping
 	public List<StudentDTO> getAllStudents() {
 		log.info("Fetching all students");
@@ -110,7 +109,7 @@ public class StudentController {
 	    return homeService.updateStudent(id, updatedStudent.getName(), updatedStudent.getCity());
 	}
 	
-	@PostMapping("/students")
+	@PostMapping
 	public ResponseEntity<StudentResponseDTO> createStudent(@Valid @RequestBody StudentRequestDTO requestDTO) {
 		log.info("Creating new student: {}", requestDTO.getName());
 		StudentResponseDTO response = homeService.createStudent(requestDTO);
