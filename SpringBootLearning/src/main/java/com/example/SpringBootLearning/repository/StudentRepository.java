@@ -17,5 +17,4 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
 	List<Student> findByName(String name);
 	List<Student> findByNameContaining(String name);
 	List<Student> findByCityIgnoreCase(String city);
-	Page<Student> findAll(Pageable pageable);
 }
