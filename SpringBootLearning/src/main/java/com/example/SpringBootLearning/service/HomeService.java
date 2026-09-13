@@ -47,9 +47,11 @@ public class HomeService {
         return "Student saved successfully with ID: " + savedStudent.getId();
     }
 	
-	public Student getStudentById(int id) {
-		return studentRepository.findById(id)
+	public StudentDTO getStudentById(int id) {
+		Student student = studentRepository.findById(id)
 				.orElseThrow(() -> new StudentNotFoundException("Student not found with id: " + id));
+		
+		return new StudentDTO(student.getName(), student.getCity());
 	}
 	
 	public List<Student> getStudentsByCity(String city) {
@@ -85,20 +87,21 @@ public class HomeService {
 	}
 	
 	public void deleteStudent(int id) {
+		if (!studentRepository.existsById(id)) {
+			throw new StudentNotFoundException("Student not found with id: " + id);
+		}
 		studentRepository.deleteById(id);
 	}
 	
-	public Student updateStudent(int id, String name, String city) {
+	public StudentDTO updateStudent(int id, String name, String city) {
 		Student student = studentRepository.findById(id)
-				.orElse(null);
-		
-		if (student == null) {
-			return null;
-		}
+				.orElseThrow(() -> new StudentNotFoundException("Student not found with id: " + id));
 		
 		student.setName(name);
 		student.setCity(city);
 		
-		return studentRepository.save(student);
+		Student updated = studentRepository.save(student);
+		return  new StudentDTO(updated.getName(), updated.getCity());
+		
 	}
 }
