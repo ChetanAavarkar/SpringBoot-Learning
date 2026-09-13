@@ -49,30 +49,19 @@ public class StudentController {
 	}
 	
 	@GetMapping
-	public List<StudentDTO> getAllStudents() {
+	public ResponseEntity<List<StudentDTO>> getAllStudents() {
 		log.info("Fetching all students");
-		return homeService.getAllStudents();
+		List<StudentDTO> students = homeService.getAllStudents();
+		return ResponseEntity.ok(students);
 	}
 	
 	@Operation(summary = "Get student by ID", description = "Retrieves a student using their ID")
 	@GetMapping("/{id}")
-	public Student getStudentById(@PathVariable int id) {
-		log.info("Student request received for ID: {}", id);
+	public ResponseEntity<StudentDTO> getStudentById(@PathVariable int id) {
+		log.info("Fetching student with ID: {}", id);
 		
-		log.debug("Searching student with id={}", id);
-		
-		try {
-			Student student = homeService.getStudentById(id);
-			
-			log.info("Student found successfully: {}", student.getName());
-			return student;
-		} catch (Exception e) {
-			log.warn("Request student ID may not exist: {}", id);
-			
-			log.error("Database operation failed while fetching studnet with ID: {}", id, e);
-			
-			throw e;
-		}
+		StudentDTO student = homeService.getStudentById(id);
+		return ResponseEntity.ok(student);
 	}
 	
 	@GetMapping("/city/{city}")
@@ -87,10 +76,10 @@ public class StudentController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<String> deleteStudent(@PathVariable int id) {
+	public ResponseEntity<Void> deleteStudent(@PathVariable int id) {
 		log.info("Deleting student with ID: {}", id);
 		homeService.deleteStudent(id);
-		return ResponseEntity.ok("Student with ID " + id + " deleted successfully");
+		return ResponseEntity.noContent().build();
 	}
 	
 	@GetMapping("/name/{name}")
@@ -104,15 +93,17 @@ public class StudentController {
 	}
 	
 	@PutMapping("/{id}")
-	public Student updateStudent(@PathVariable int id, @RequestBody Student updatedStudent) {
+	public ResponseEntity<StudentDTO> updateStudent(@PathVariable int id, @RequestBody Student updatedStudent) {
 		log.info("Updating student with ID: {}", id);
-	    return homeService.updateStudent(id, updatedStudent.getName(), updatedStudent.getCity());
+		
+		StudentDTO updated = homeService.updateStudent(id, updatedStudent.getName(), updatedStudent.getCity());
+	    return ResponseEntity.ok(updated);
 	}
 	
 	@PostMapping
 	public ResponseEntity<StudentResponseDTO> createStudent(@Valid @RequestBody StudentRequestDTO requestDTO) {
 		log.info("Creating new student: {}", requestDTO.getName());
 		StudentResponseDTO response = homeService.createStudent(requestDTO);
-		return ResponseEntity.ok(response);
+		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 }
